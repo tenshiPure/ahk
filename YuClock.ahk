@@ -1,7 +1,8 @@
 ;YuClock.ahk
-;‚ä‚Á‚­‚ë‚Á‚­
 
+;--------------
 ;•ª‚Ì“Ç‚İã‚°
+;--------------
 NumpadSub::
 	FormatTime, h, , H
 	FormatTime, m, , m
@@ -11,7 +12,9 @@ NumpadSub::
 	Run C:\Program Files (x86)\softalk\SofTalk.exe /X:1 /S:100 /V:100 /W:%current_time%
 return
 
+;--------------
 ;—j“ú‚Ì“Ç‚İã‚°
+;--------------
 NumpadMult::
 	FormatTime, w, , dddd
 
@@ -20,7 +23,9 @@ NumpadMult::
 	Run C:\Program Files (x86)\softalk\SofTalk.exe /X:1 /S:100 /V:100 /W:%current_week%
 return
 
+;--------------
 ;Œ“ú‚Ì“Ç‚İã‚°
+;--------------
 NumpadDiv::
 	FormatTime, m, , M
 	FormatTime, d, , d
