@@ -7,7 +7,8 @@
 
 ;かざぐるマウス連携++++++++++++++++++++++++++++
 ;非アクティブウィンドウのスクロール可
-;Shift + スクロールで水平スクロール３行
+;Shift + スクロール        -> 水平スクロール３行
+;Shift + Ctrl + スクロール -> 上端・下端ジャンプ
 ;++++++++++++++++++++++++++++++++++++++++++++++
 
 
@@ -42,6 +43,44 @@ MButton::
 	{
 		;ctrl + w
 		Send, ^w
+	}
+return
+
+;----------------
+;ホイール上
+;----------------
+WheelUp::
+	getRClickStateAndWinTitle()
+
+	if RState = U
+	{
+		;上スクロール
+		Send {Click, WheelUp}
+	}
+
+	if RState = D
+	{
+		;上端ジャンプ（かざぐるマウス連携）
+		Send ^+{Click, WheelUp}
+	}
+return
+
+;----------------
+;ホイール下
+;----------------
+WheelDown::
+	getRClickStateAndWinTitle()
+
+	if RState = U
+	{
+		;下スクロール
+		Send {Click, WheelDown}
+	}
+
+	if RState = D
+	{
+		;下端ジャンプ（かざぐるマウス連携）
+		Send ^+{Click, WheelDown}
 	}
 return
 
@@ -127,8 +166,17 @@ XButton2::
 
 	if RState = U
 	{
-		;戻るボタン（SetPoint連携）
-		Send, {XButton1}
+		;Excel
+		IfInString, winTitle, Excel
+		{
+			;左シートへ移動
+			Send, ^{PgUp}
+			return
+		}
+
+		else
+			;戻るボタン（SetPoint連携）
+			Send, {XButton1}
 	}
 
 	if RState = D
@@ -146,8 +194,17 @@ XButton1::
 
 	if RState = U
 	{
-		;進むボタン（SetPoint連携）
-		Send, {XButton2}
+		;Excel
+		IfInString, winTitle, Excel
+		{
+			;右シートへ移動
+			Send, ^{PgDn}
+			return
+		}
+
+		else
+			;進むボタン（SetPoint連携）
+			Send, {XButton2}
 	}
 
 	if RState = D
