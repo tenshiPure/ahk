@@ -1,72 +1,158 @@
 ;MouseEnhance.ahk
-;�}�E�X�̋���
 
-;�E�{�^��+�}�E�X�{�^���̑���
+;SetPoint連携++++++++++++++++++++++++++++++++++
+;ホイール左：^!L
+;ホイール右：^!R
+;++++++++++++++++++++++++++++++++++++++++++++++
 
-;+�z�C�[���{�^��
-;ctrl + w
+;かざぐるマウス連携++++++++++++++++++++++++++++
+;非アクティブウィンドウのスクロール可
+;Shift + スクロールで水平スクロール３行
+;++++++++++++++++++++++++++++++++++++++++++++++
+
+
+global RState    := ""
+global winTitle := ""
+
+;--------------------------------
+;全てのスクリプトの初めに呼ばれる
+;--------------------------------
+getRClickStateAndWinTitle()
+{
+	;右クリックが押されているか
+	GetKeyState, RState, RButton
+
+	;アクティブウィンドウのタイトル
+	WinGetTitle, winTitle, A, , ,
+}
+
+;----------------
+;ホイールクリック
+;----------------
 MButton::
-	GetKeyState, State, RButton
-	if State = U
-		MouseClick, M
-	if State = D
+	getRClickStateAndWinTitle()
+
+	if RState = U
 	{
+		;ホイールクリック（SetPoint連携）
+		MouseClick, M
+	}
+
+	if RState = D
+	{
+		;ctrl + w
 		Send, ^w
 	}
 return
 
-;+�z�C�[���{�^���i���j
-;�����[�h
-^+!A::
-	GetKeyState, State, RButton
-	if State = U
+;----------------------------------------------------
+;ホイール左（SetPoint連携）
+;----------------------------------------------------
+^!L::
+	getRClickStateAndWinTitle()
+
+	if RState = U
 	{
-		WinGetTitle, winTitle, A, , ,
-		
+		;FireFox
 		IfInString, winTitle, Firefox
+		{
+			;リロード
 			Send, {F5}
+			return
+		}
+
+		;Chrome
+		IfInString, winTitle, Chrome
+		{
+			;リロード
+			Send, {F5}
+			return
+		}
+
+		;Excel
+		IfInString, winTitle, Excel
+		{
+			;左スクロール（かざぐるマウス連携）
+			Send +{Click, WheelUp}
+			return
+		}
+
 		else
+			;閉じる
 			Send, !{F4}
 	}
 
-	if State = D
+	if RState = D
 	{
 		MsgBox, left
 	}
 return
 
-;+�z�C�[���{�^���i�E�j
-;�u�b�N�}�[�N
-^+!B::
-	GetKeyState, State, RButton
-	if State = U
-		Send, ^d
-	if State = D
+;----------------------------------------------------
+;ホイール右（SetPoint連携）
+;----------------------------------------------------
+^!R::
+	getRClickStateAndWinTitle()
+
+	if RState = U
+	{
+		;FireFox
+		IfInString, winTitle, Firefox
+		{
+			;ブックマーク
+			Send, ^d
+			return
+		}
+
+		;Excel
+		IfInString, winTitle, Excel
+		{
+			;右スクロール（かざぐるマウス連携）
+			Send +{Click, WheelDown}
+			return
+		}
+	}
+
+	if RState = D
 	{
 		MsgBox, right
 	}
 return
 
-;+�i�ރ{�^��
-;���̃^�u��
+;----------------------
+;戻るボタン
+;----------------------
 XButton2::
-	GetKeyState, State, RButton
-	if State = U
-		Send, {XButton1}
-	if State = D
+	getRClickStateAndWinTitle()
+
+	if RState = U
 	{
+		;戻るボタン（SetPoint連携）
+		Send, {XButton1}
+	}
+
+	if RState = D
+	{
+		;左タブへ移動
 		Send, ^+{Tab}
 	}
 return
 
-;+�߂�{�^��
-;�E�̃^�u��
+;----------------------
+;進むボタン
+;----------------------
 XButton1::
-	GetKeyState, State, RButton
-	if State = U
-		Send, {XButton2}
-	if State = D
+	getRClickStateAndWinTitle()
+
+	if RState = U
 	{
+		;進むボタン（SetPoint連携）
+		Send, {XButton2}
+	}
+
+	if RState = D
+	{
+		;右タブへ移動
 		Send, ^{Tab}
 	}
 return
